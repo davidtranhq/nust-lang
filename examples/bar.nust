@@ -1,0 +1,13 @@
+fn main() {
+    let x: i32 = 42;
+    if x > 0 {
+        let y: i32 = x + 1;
+    } else {
+        let y: i32 = x - 1;
+    }
+    
+    let mut i: i32 = 0;
+    while i < 10 {
+        i = i + 1;
+    }
+}

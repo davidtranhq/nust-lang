@@ -1,0 +1,85 @@
+<program>      ::= <item_list>
+
+<item_list>    ::= <item> <item_list>
+                | ε
+
+<item>         ::= <function_decl>
+                | <stmt>
+
+<function_decl> ::= "fn" <ident> "(" <param_list_opt> ")" "{" <stmt_list> "}"
+
+<param_list_opt> ::= <param_list>
+                   | ε
+
+<param_list>   ::= <param> "," <param_list>
+                 | <param>
+
+<param>        ::= <mut_opt> <ident> ":" <type>
+
+<stmt_list>    ::= <stmt> <stmt_list>
+                 | ε
+
+<stmt>         ::= <let_stmt> ";"
+                 | <expr_stmt> ";"
+                 | <if_stmt>
+                 | <while_stmt>
+                 | <block>
+
+<block>        ::= "{" <stmt_list> "}"
+
+<let_stmt>     ::= "let" <mut_opt> <ident> ":" <type> "=" <expr>
+
+<expr_stmt>    ::= <expr>
+
+<if_stmt>      ::= "if" "(" <expr> ")" <block> <else_clause_opt>
+
+<else_clause_opt> ::= "else" <block>
+                    | ε
+
+<while_stmt>   ::= "while" "(" <expr> ")" <block>
+
+<expr>         ::= <literal>
+                | <ident>
+                | <expr> <binop> <expr>
+                | <unop> <expr>
+                | <expr> "(" <arg_list_opt> ")"         // function call
+                | "&" <expr>                            // immutable borrow
+                | "&mut" <expr>                         // mutable borrow
+                | "(" <expr> ")"                        // grouping
+                | <ident> "=" <expr>                    // assignment
+
+<arg_list_opt> ::= <arg_list>
+                 | ε
+
+<arg_list>     ::= <expr> "," <arg_list>
+                 | <expr>
+
+<binop>        ::= "+" | "-" | "*" | "/" 
+                | "==" | "!=" | "<" | ">" | "<=" | ">="
+                | "&&" | "||"  // logical AND and OR
+
+<unop>         ::= "-" | "!"
+
+<mut_opt>      ::= "mut"
+                 | ε
+
+<literal>      ::= <int_lit> | <bool_lit> | <string_lit>
+
+<int_lit>      ::= [0-9]+
+
+<bool_lit>     ::= "true" | "false"
+
+<string_lit>   ::= "\"" <string_char>* "\""
+
+<string_char>  ::= any character except `"` or `\`
+                | "\\" <escaped_char>
+
+<escaped_char> ::= "\"" | "\\" | "n" | "t" | "r"
+
+<type>         ::= "i32"
+                | "bool"
+                | "str"
+                | "&" <type>              // immutable reference
+                | "&mut" <type>           // mutable reference
+
+<ident>        ::= [a-zA-Z_][a-zA-Z0-9_]*
